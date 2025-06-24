@@ -1,0 +1,79 @@
+{% extends 'banking/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Open a Savings Account</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h4>Benefits</h4>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <i class="fas fa-percentage text-success me-2"></i>
+                                    2.50% Annual Interest Rate
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-shield-alt text-primary me-2"></i>
+                                    FDIC Insured up to $250,000
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-dollar-sign text-success me-2"></i>
+                                    No Minimum Balance Required
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-sync text-primary me-2"></i>
+                                    Easy Transfers Between Accounts
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Features</h4>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <i class="fas fa-mobile-alt text-primary me-2"></i>
+                                    Mobile Banking Access
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-chart-line text-success me-2"></i>
+                                    Monthly Interest Payments
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-bell text-primary me-2"></i>
+                                    Account Alerts
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-file-invoice text-success me-2"></i>
+                                    Monthly Statements
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <form method="post" class="mt-4">
+                        {% csrf_token %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            By opening a savings account, you agree to our terms and conditions.
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-piggy-bank me-2"></i>
+                                Open Savings Account
+                            </button>
+                            <a href="{% url 'banking:dashboard' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Back to Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

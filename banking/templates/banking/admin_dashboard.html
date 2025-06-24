@@ -1,0 +1,208 @@
+{% extends 'banking/base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h2 mb-0">Admin Dashboard</h1>
+                <div class="text-muted">Last updated: {{ now|date:"F d, Y H:i" }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="card-title text-muted mb-0">Total Users</h6>
+                        <i class="fas fa-users text-primary"></i>
+                    </div>
+                    <h2 class="display-6 mb-2">{{ total_users }}</h2>
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-success me-2">Active</span>
+                        <span class="text-muted">{{ active_users }} users</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="card-title text-muted mb-0">Total Accounts</h6>
+                        <i class="fas fa-piggy-bank text-success"></i>
+                    </div>
+                    <h2 class="display-6 mb-2">{{ total_accounts }}</h2>
+                    <div class="d-flex flex-column">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Checking</span>
+                            <span class="fw-bold">{{ total_checking }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Savings</span>
+                            <span class="fw-bold">{{ total_savings }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="card-title text-muted mb-0">Credit Cards</h6>
+                        <i class="fas fa-credit-card text-info"></i>
+                    </div>
+                    <h2 class="display-6 mb-2">{{ total_credit_cards }}</h2>
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar bg-info" style="width: 75%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="card-title text-muted mb-0">Transactions</h6>
+                        <i class="fas fa-exchange-alt text-warning"></i>
+                    </div>
+                    <h2 class="display-6 mb-2">{{ total_transactions }}</h2>
+                    <div class="d-flex flex-column">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Pending</span>
+                            <span class="badge bg-warning">{{ pending_count }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Completed</span>
+                            <span class="badge bg-success">{{ completed_count }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Transactions -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Pending Transactions</h5>
+                        <span class="badge bg-warning">{{ pending_transactions|length }} pending</span>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    {% if pending_transactions %}
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="border-0">Date</th>
+                                        <th class="border-0">Type</th>
+                                        <th class="border-0">Amount</th>
+                                        <th class="border-0">Account</th>
+                                        <th class="border-0">Description</th>
+                                        <th class="border-0 text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for transaction in pending_transactions %}
+                                        <tr>
+                                            <td>{{ transaction.timestamp|date:"M d, Y H:i" }}</td>
+                                            <td>
+                                                <span class="badge bg-primary">{{ transaction.transaction_type }}</span>
+                                            </td>
+                                            <td class="fw-bold">${{ transaction.amount|floatformat:2 }}</td>
+                                            <td>
+                                                <span class="text-muted">{{ transaction.account.account_number }}</span>
+                                            </td>
+                                            <td>{{ transaction.description }}</td>
+                                            <td class="text-end">
+                                                <a href="{% url 'banking:admin_approve_transaction' transaction.id %}" 
+                                                   class="btn btn-sm btn-success me-2">
+                                                   <i class="fas fa-check me-1"></i>Approve
+                                                </a>
+                                                <a href="{% url 'banking:admin_reject_transaction' transaction.id %}" 
+                                                   class="btn btn-sm btn-danger">
+                                                   <i class="fas fa-times me-1"></i>Reject
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-check-circle text-success fa-3x mb-3"></i>
+                            <p class="text-muted mb-0">No pending transactions</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="row">
+        <div class="col">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Recent Transactions</h5>
+                        <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="border-0">Date</th>
+                                    <th class="border-0">Type</th>
+                                    <th class="border-0">Amount</th>
+                                    <th class="border-0">Account</th>
+                                    <th class="border-0">Status</th>
+                                    <th class="border-0">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for transaction in recent_transactions %}
+                                    <tr>
+                                        <td>{{ transaction.timestamp|date:"M d, Y H:i" }}</td>
+                                        <td>
+                                            <span class="badge bg-primary">{{ transaction.transaction_type }}</span>
+                                        </td>
+                                        <td class="fw-bold">${{ transaction.amount|floatformat:2 }}</td>
+                                        <td>
+                                            <span class="text-muted">{{ transaction.account.account_number }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge {% if transaction.status == 'COMPLETED' %}bg-success{% elif transaction.status == 'PENDING' %}bg-warning{% else %}bg-danger{% endif %}">
+                                                {{ transaction.status }}
+                                            </span>
+                                        </td>
+                                        <td>{{ transaction.description }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %} 

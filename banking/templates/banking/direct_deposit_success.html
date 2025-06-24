@@ -1,0 +1,64 @@
+{% extends 'banking/base.html' %}
+{% load static %}
+
+{% block title %}Direct Deposit Form Generated{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Direct Deposit Form Generated</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-success">
+                        <h5 class="alert-heading">Success!</h5>
+                        <p class="mb-0">Your direct deposit form has been generated. Please provide this information to your employer.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5>Direct Deposit Information for {{ employer_name }}</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th>Bank Name</th>
+                                        <td>MyBank</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Routing Number</th>
+                                        <td>{{ routing_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Account Number</th>
+                                        <td>{{ account_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Account Type</th>
+                                        <td>Checking</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <h5 class="alert-heading">Next Steps</h5>
+                        <ol class="mb-0">
+                            <li>Provide this information to your employer's HR department</li>
+                            <li>Your employer will process the direct deposit setup</li>
+                            <li>Your first direct deposit should appear in your account within 1-2 pay periods</li>
+                        </ol>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{% url 'banking:dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+                        <button onclick="window.print()" class="btn btn-secondary">Print Form</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

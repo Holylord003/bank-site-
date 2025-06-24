@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Credit Card</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        .header-icon {
+            font-size: 3rem;
+            color: #dd1818;
+            margin-bottom: 20px;
+        }
+        .benefits-list {
+            background: linear-gradient(135deg, #333333 0%, #dd1818 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .benefits-list ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .benefits-list ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .benefits-list ul li:last-child {
+            border-bottom: none;
+        }
+        .benefits-list ul li i {
+            margin-right: 10px;
+        }
+        .credit-card-img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'banking:dashboard' %}">MyBank</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'banking:transaction_history' %}">History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12 text-center mb-4">
+                <h1>Apply for a Credit Card</h1>
+                <p class="text-muted">Enjoy the benefits and convenience of our premium credit card</p>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="benefits-list">
+                    <h3 class="mb-4">Credit Card Benefits</h3>
+                    <ul>
+                        <li><i class="fas fa-dollar-sign"></i> No annual fee</li>
+                        <li><i class="fas fa-percentage"></i> Competitive 18.99% APR</li>
+                        <li><i class="fas fa-undo"></i> Cash back rewards on purchases</li>
+                        <li><i class="fas fa-shield-alt"></i> Fraud protection and zero liability</li>
+                        <li><i class="fas fa-globe"></i> Accepted worldwide</li>
+                        <li><i class="fas fa-mobile-alt"></i> 24/7 online and mobile access</li>
+                    </ul>
+                </div>
+                
+                <div class="card p-3 mb-4">
+                    <h5><i class="fas fa-info-circle text-primary me-2"></i>Instant Approval</h5>
+                    <p class="mb-0">Get an instant decision on your application and start using your card right away with our digital wallet integration.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-container">
+                    <div class="text-center">
+                        <i class="fas fa-credit-card header-icon"></i>
+                        <h3 class="mb-4">Apply Now</h3>
+                    </div>
+
+                    <form method="post" action="{% url 'banking:apply_credit_card' %}">
+                        {% csrf_token %}
+                        <p class="mb-4">By applying for a credit card, you authorize us to perform a credit check. Your new card will be linked to your existing profile..</p>
+                        
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="terms" required>
+                            <label class="form-check-label" for="terms">
+                                I agree to the <a href="#">terms and conditions</a>
+                            </label>
+                        </div>
+                        
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="credit_check" required>
+                            <label class="form-check-label" for="credit_check">
+                                I authorize a credit check
+                            </label>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger btn-lg">Apply for Credit Card</button>
+                            <a href="{% url 'banking:dashboard' %}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

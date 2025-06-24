@@ -1,0 +1,94 @@
+{% extends 'banking/base.html' %}
+{% load static %}
+
+{% block title %}Check Order Confirmation{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Check Order Confirmation</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-success">
+                        <h5 class="alert-heading">Order Placed Successfully!</h5>
+                        <p class="mb-0">Your check order has been placed and will be processed shortly.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5>Order Details</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th>Check Style</th>
+                                        <td>{{ style|title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Quantity</th>
+                                        <td>{{ quantity }} checks</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Account Number</th>
+                                        <td>{{ checking_account.account_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Shipping Address</th>
+                                        <td>
+                                            {{ address }}<br>
+                                            {{ city }}, {{ state }} {{ zip_code }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5>Order Summary</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th>Base Price</th>
+                                        <td>${{ base_price|floatformat:2 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Quantity Price</th>
+                                        <td>${{ quantity_price|floatformat:2 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Style Upgrade</th>
+                                        <td>${{ style_price|floatformat:2 }}</td>
+                                    </tr>
+                                    <tr class="table-primary">
+                                        <th>Total Cost</th>
+                                        <td>${{ total_cost|floatformat:2 }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <h5 class="alert-heading">Next Steps</h5>
+                        <ol class="mb-0">
+                            <li>Your order will be processed within 24 hours</li>
+                            <li>Checks will be shipped within 5-7 business days</li>
+                            <li>You will receive a shipping confirmation email</li>
+                            <li>Your account will be charged when the order ships</li>
+                        </ol>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{% url 'banking:dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+                        <button onclick="window.print()" class="btn btn-secondary">Print Order Confirmation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

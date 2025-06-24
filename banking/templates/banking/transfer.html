@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer Between Accounts</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        .header-icon {
+            font-size: 3rem;
+            color: #2575fc;
+            margin-bottom: 20px;
+        }
+        .security-tips {
+            background-color: #f8f9fa;
+            border-left: 4px solid #2575fc;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+        .security-tips h5 {
+            color: #2575fc;
+        }
+        .account-select {
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+        }
+        .account-select:hover {
+            border-color: #2575fc;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'banking:dashboard' %}">MyBank</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'banking:transaction_history' %}">History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12 text-center mb-4">
+                <h1>Transfer Between Accounts</h1>
+                <p class="text-muted">Move money between your accounts instantly</p>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="form-container">
+            <div class="text-center">
+                <i class="fas fa-exchange-alt header-icon"></i>
+                <h3 class="mb-4">Transfer Money</h3>
+            </div>
+
+            <form method="post" action="{% url 'banking:transfer' %}">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="from_account" class="form-label">From Account</label>
+                    <select class="form-select account-select" id="from_account" name="from_account" required>
+                        <option value="" selected disabled>Select account</option>
+                        {% for account in accounts %}
+                            <option value="{{ account.id }}">
+                                {{ account.get_account_type_display }} ({{ account.account_number }}) - ${{ account.balance|floatformat:2 }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="to_account" class="form-label">To Account</label>
+                    <select class="form-select account-select" id="to_account" name="to_account" required>
+                        <option value="" selected disabled>Select account</option>
+                        {% for account in accounts %}
+                            <option value="{{ account.id }}">
+                                {{ account.get_account_type_display }} ({{ account.account_number }}) - ${{ account.balance|floatformat:2 }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="amount" class="form-label">Amount</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" class="form-control" id="amount" name="amount" min="0.01" step="0.01" required>
+                    </div>
+                </div>
+
+                <div class="security-tips">
+                    <h5><i class="fas fa-shield-alt me-2"></i>Transfer Tips</h5>
+                    <ul class="mb-0">
+                        <li>Transfers between your accounts are processed immediately</li>
+                        <li>Double-check the account details before confirming</li>
+                        <li>There are no fees for transfers between your accounts</li>
+                    </ul>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">Transfer Money</button>
+                    <a href="{% url 'banking:dashboard' %}" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Prevent selecting the same account for both from and to fields
+        document.getElementById('from_account').addEventListener('change', function() {
+            const fromAccount = this.value;
+            const toAccountSelect = document.getElementById('to_account');
+            
+            // Enable all options first
+            Array.from(toAccountSelect.options).forEach(option => {
+                option.disabled = false;
+            });
+            
+            // Disable the selected 'from' account in the 'to' dropdown
+            Array.from(toAccountSelect.options).forEach(option => {
+                if (option.value === fromAccount) {
+                    option.disabled = true;
+                }
+            });
+            
+            // If the currently selected 'to' account is the same as the 'from' account, reset it
+            if (toAccountSelect.value === fromAccount) {
+                toAccountSelect.value = "";
+            }
+        });
+        
+        document.getElementById('to_account').addEventListener('change', function() {
+            const toAccount = this.value;
+            const fromAccountSelect = document.getElementById('from_account');
+            
+            // Enable all options first
+            Array.from(fromAccountSelect.options).forEach(option => {
+                option.disabled = false;
+            });
+            
+            // Disable the selected 'to' account in the 'from' dropdown
+            Array.from(fromAccountSelect.options).forEach(option => {
+                if (option.value === toAccount) {
+                    option.disabled = true;
+                }
+            });
+            
+            // If the currently selected 'from' account is the same as the 'to' account, reset it
+            if (fromAccountSelect.value === toAccount) {
+                fromAccountSelect.value = "";
+            }
+        });
+    </script>
+</body>
+</html>

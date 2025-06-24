@@ -1,0 +1,46 @@
+{% extends 'banking/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Deposit Funds</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="account_type" class="form-label">Select Account</label>
+                            <select class="form-select" id="account_type" name="account_type" required>
+                                {% if has_checking %}
+                                <option value="checking">Checking (Balance: ${{ checking_balance }})</option>
+                                {% endif %}
+                                {% if has_savings %}
+                                <option value="savings">Savings (Balance: ${{ savings_balance }})</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="amount" name="amount" step="0.01" min="0.01" required>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-arrow-down me-2"></i>Deposit
+                            </button>
+                            <a href="{% url 'banking:dashboard' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

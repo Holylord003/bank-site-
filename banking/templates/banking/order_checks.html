@@ -1,0 +1,106 @@
+{% extends 'banking/base.html' %}
+{% load static %}
+
+{% block title %}Order Checks{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Order Checks</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h5 class="alert-heading">Check Order Information</h5>
+                        <p class="mb-0">Please fill out the form below to order your checks.</p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <h5>Check Style</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="radio" name="style" id="style_standard" value="standard" checked>
+                                        <label class="form-check-label" for="style_standard">
+                                            Standard Style ($15.99)
+                                            <small class="d-block text-muted">Classic design with your account information</small>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="radio" name="style" id="style_premium" value="premium">
+                                        <label class="form-check-label" for="style_premium">
+                                            Premium Style ($21.98)
+                                            <small class="d-block text-muted">Elegant design with additional security features</small>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5>Quantity</h5>
+                            <div class="form-group">
+                                <select class="form-select" name="quantity" required>
+                                    <option value="100">100 checks ($40.99)</option>
+                                    <option value="200">200 checks ($65.99)</option>
+                                    <option value="300">300 checks ($90.99)</option>
+                                    <option value="400">400 checks ($115.99)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5>Shipping Address</h5>
+                            <div class="form-group mb-3">
+                                <label for="address" class="form-label">Street Address</label>
+                                <input type="text" class="form-control" id="address" name="address" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="city" class="form-label">City</label>
+                                        <input type="text" class="form-control" id="city" name="city" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group mb-3">
+                                        <label for="state" class="form-label">State</label>
+                                        <input type="text" class="form-control" id="state" name="state" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group mb-3">
+                                        <label for="zip_code" class="form-label">ZIP Code</label>
+                                        <input type="text" class="form-control" id="zip_code" name="zip_code" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <h5 class="alert-heading">Important Information</h5>
+                            <ul class="mb-0">
+                                <li>Checks will be shipped within 5-7 business days</li>
+                                <li>Shipping is free for all orders</li>
+                                <li>Your checks will be printed with your account number: {{ checking_account.account_number }}</li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">Place Order</button>
+                            <a href="{% url 'banking:dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

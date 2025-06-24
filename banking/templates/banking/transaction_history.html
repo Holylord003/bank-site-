@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .transaction-table {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .filter-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .account-badge {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        .checking-badge {
+            background-color: #6a11cb;
+            color: white;
+        }
+        .savings-badge {
+            background-color: #11998e;
+            color: white;
+        }
+        .credit-badge {
+            background-color: #dd1818;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'banking:dashboard' %}">MyBank</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'banking:transaction_history' %}">History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1>Transaction History</h1>
+                <p class="text-muted">{{ account_name }}</p>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="card filter-card mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Filters</h5>
+                <form method="get" action="{% url 'banking:transaction_history' %}" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="account_filter" class="form-label">Account</label>
+                        <select class="form-select" id="account_filter" name="account_id">
+                            <option value="">All Accounts</option>
+                            {% for account in accounts %}
+                                <option value="{{ account.id }}" {% if selected_account_id == account.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ account.get_account_type_display }} ({{ account.account_number }})
+                                </option>
+                            {% endfor %}
+                            {% for card in cards %}
+                                <option value="c{{ card.id }}" {% if selected_card_id == card.id|stringformat:"s" %}selected{% endif %}>
+                                    Credit Card (ending in {{ card.card_number|slice:"-4:" }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="type_filter" class="form-label">Transaction Type</label>
+                        <select class="form-select" id="type_filter" name="type">
+                            <option value="">All Types</option>
+                            {% for type_code, type_name in transaction_types %}
+                                <option value="{{ type_code }}" {% if request.GET.type == type_code %}selected{% endif %}>
+                                    {{ type_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="date_range" class="form-label">Date Range</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ request.GET.start_date }}">
+                            <span class="input-group-text">to</span>
+                            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ request.GET.end_date }}">
+                        </div>
+                    </div>
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-primary">Apply Filters</button>
+                        <a href="{% url 'banking:transaction_history' %}" class="btn btn-outline-secondary">Clear Filters</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Transactions Table -->
+        {% if transactions %}
+            <div class="table-responsive transaction-table">
+                <table class="table table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Account</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                            <tr>
+                                <td>
+                                    {% if transaction.account %}
+                                        <span class="badge {% if transaction.account.account_type == 'CHECKING' %}checking-badge{% elif transaction.account.account_type == 'SAVINGS' %}savings-badge{% endif %}">
+                                            {{ transaction.account.get_account_type_display }}
+                                        </span>
+                                    {% elif transaction.credit_card %}
+                                        <span class="badge credit-badge">
+                                            Credit Card ({{ transaction.credit_card.card_number|slice:"-4:" }})
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Unknown</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if transaction.transaction_type == 'DEPOSIT' %}
+                                        <span class="badge bg-success">Deposit</span>
+                                    {% elif transaction.transaction_type == 'WITHDRAWAL' %}
+                                        <span class="badge bg-danger">Withdrawal</span>
+                                    {% elif transaction.transaction_type == 'TRANSFER' %}
+                                        <span class="badge bg-primary">Transfer</span>
+                                    {% elif transaction.transaction_type == 'PAYMENT' %}
+                                        <span class="badge bg-warning">Payment</span>
+                                    {% elif transaction.transaction_type == 'PURCHASE' %}
+                                        <span class="badge bg-info">Purchase</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ transaction.transaction_type }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>${{ transaction.amount|floatformat:2 }}</td>
+                                <td>{{ transaction.timestamp|date:"M d, Y" }}</td>
+                                <td>{{ transaction.description }}</td>
+                                <td>
+                                    {% if transaction.status == 'COMPLETED' %}
+                                        <span class="badge bg-success">Completed</span>
+                                    {% elif transaction.status == 'PENDING' %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% elif transaction.status == 'FAILED' %}
+                                        <span class="badge bg-danger">Failed</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ transaction.status }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <p>No transactions found matching your criteria.</p>
+            </div>
+        {% endif %}
+
+        <div class="mt-4">
+            <a href="{% url 'banking:dashboard' %}" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Handle account filter change to update URL
+        document.getElementById('account_filter').addEventListener('change', function() {
+            const selectedValue = this.value;
+            const form = this.closest('form');
+            
+            // Clear the other parameter if it exists
+            if (selectedValue.startsWith('c')) {
+                // It's a credit card
+                const cardId = selectedValue.substring(1);
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'card_id';
+                hiddenInput.value = cardId;
+                form.appendChild(hiddenInput);
+                
+                // Remove account_id parameter
+                const accountInput = form.querySelector('input[name="account_id"]');
+                if (accountInput) {
+                    form.removeChild(accountInput);
+                }
+                
+                // Set account_id select to empty
+                this.value = '';
+            }
+        });
+    </script>
+</body>
+</html>

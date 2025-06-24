@@ -1,0 +1,62 @@
+{% extends 'banking/base.html' %}
+{% load static %}
+
+{% block title %}Set Up Direct Deposit{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Set Up Direct Deposit</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h5 class="alert-heading">Direct Deposit Information</h5>
+                        <p class="mb-0">Provide this information to your employer to set up direct deposit:</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5>Bank Information</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Bank Name</label>
+                                    <input type="text" class="form-control" value="MyBank" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Routing Number</label>
+                                    <input type="text" class="form-control" value="123456789" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label class="form-label">Account Number</label>
+                            <input type="text" class="form-control" value="{{ checking_account.account_number }}" readonly>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label class="form-label">Account Type</label>
+                            <input type="text" class="form-control" value="Checking" readonly>
+                        </div>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="employer_name" class="form-label">Employer Name</label>
+                            <input type="text" class="form-control" id="employer_name" name="employer_name" required>
+                        </div>
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">Generate Direct Deposit Form</button>
+                            <a href="{% url 'banking:dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
