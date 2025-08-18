@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.views import LoginView
 from django.views.generic import TemplateView, CreateView, ListView, DetailView
@@ -15,6 +16,10 @@ import string
 import datetime
 import re
 from decimal import Decimal
+
+def homepage(request):
+    """Homepage view for the banking application"""
+    return render(request, 'banking/homepage.html')
 
 def generate_account_number():
     return ''.join(random.choices(string.digits, k=10))

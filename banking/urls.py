@@ -5,7 +5,8 @@ from . import views
 app_name = 'banking'
 
 urlpatterns = [
-    path('', views.CustomLoginView.as_view(), name='login'),
+    path('', views.homepage, name='homepage'),
+    path('login/', views.CustomLoginView.as_view(), name='login'),
     path('register/', views.RegisterView.as_view(), name='register'),
     path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
     path('transactions/', views.transaction_history, name='transaction_history'),

@@ -1,0 +1,280 @@
+{% extends 'banking/base.html' %}
+{% load static %}
+
+{% block title %}Welcome to SecureBank - Your Trusted Banking Partner{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-white py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 80vh; display: flex; align-items: center;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Your Financial Future Starts Here</h1>
+                <p class="lead mb-4">Experience modern banking with SecureBank. We offer comprehensive financial solutions designed to help you achieve your goals with security, convenience, and personalized service.</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{% url 'banking:login' %}" class="btn btn-light btn-lg px-4 py-3 fw-semibold">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </a>
+                    <a href="{% url 'banking:register' %}" class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold">
+                        <i class="fas fa-user-plus me-2"></i>Open Account
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image">
+                    <i class="fas fa-shield-alt" style="font-size: 8rem; opacity: 0.3;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Why Choose SecureBank?</h2>
+            <p class="lead text-muted">Discover the advantages that make us your trusted banking partner</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-shield-alt text-primary" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Secure Banking</h5>
+                        <p class="card-text text-muted">Advanced security measures protect your accounts and transactions 24/7.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-mobile-alt text-success" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Mobile Banking</h5>
+                        <p class="card-text text-muted">Bank anywhere, anytime with our mobile-friendly platform.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-percentage text-warning" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Competitive Rates</h5>
+                        <p class="card-text text-muted">Enjoy competitive interest rates on savings and low fees.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-4">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-headset text-info" style="font-size: 2.5rem;"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">24/7 Support</h5>
+                        <p class="card-text text-muted">Round-the-clock customer support to help you anytime.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Our Banking Services</h2>
+            <p class="lead text-muted">Comprehensive financial solutions tailored to your needs</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="service-icon me-3">
+                                <i class="fas fa-university text-primary" style="font-size: 2rem;"></i>
+                            </div>
+                            <h4 class="card-title mb-0 fw-bold">Checking Accounts</h4>
+                        </div>
+                        <p class="card-text text-muted">Flexible checking accounts with no minimum balance requirements and free online banking.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>No monthly fees</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Free debit card</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Online bill pay</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="service-icon me-3">
+                                <i class="fas fa-piggy-bank text-success" style="font-size: 2rem;"></i>
+                            </div>
+                            <h4 class="card-title mb-0 fw-bold">Savings Accounts</h4>
+                        </div>
+                        <p class="card-text text-muted">High-yield savings accounts to help you grow your money with competitive interest rates.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>1.50% APY</li>
+                            <li><i class="fas fa-check text-success me-2"></i>No minimum balance</li>
+                            <li><i class="fas fa-check text-success me-2"></i>FDIC insured</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="service-icon me-3">
+                                <i class="fas fa-credit-card text-warning" style="font-size: 2rem;"></i>
+                            </div>
+                            <h4 class="card-title mb-0 fw-bold">Credit Cards</h4>
+                        </div>
+                        <p class="card-text text-muted">Rewards credit cards with cashback, travel points, and low APR options.</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>Cashback rewards</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Low APR</li>
+                            <li><i class="fas fa-check text-success me-2"></i>No annual fee</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 col-6 mb-4">
+                <div class="stat-item">
+                    <h3 class="display-4 fw-bold mb-2">50K+</h3>
+                    <p class="mb-0">Happy Customers</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="stat-item">
+                    <h3 class="display-4 fw-bold mb-2">$2B+</h3>
+                    <p class="mb-0">Assets Managed</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="stat-item">
+                    <h3 class="display-4 fw-bold mb-2">25+</h3>
+                    <p class="mb-0">Years Experience</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="stat-item">
+                    <h3 class="display-4 fw-bold mb-2">99.9%</h3>
+                    <p class="mb-0">Uptime</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="display-5 fw-bold mb-4">Ready to Get Started?</h2>
+                <p class="lead text-muted mb-4">Join thousands of satisfied customers who trust SecureBank with their financial future.</p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a href="{% url 'banking:register' %}" class="btn btn-primary btn-lg px-5 py-3 fw-semibold">
+                        <i class="fas fa-rocket me-2"></i>Open Your Account
+                    </a>
+                    <a href="{% url 'banking:login' %}" class="btn btn-outline-primary btn-lg px-5 py-3 fw-semibold">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="mb-3">SecureBank</h5>
+                <p class="text-muted mb-0">Your trusted partner for all your banking needs.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p class="text-muted mb-0">&copy; 2024 SecureBank. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+.hero-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    pointer-events: none;
+}
+
+.feature-icon, .service-icon {
+    transition: transform 0.3s ease;
+}
+
+.card:hover .feature-icon,
+.card:hover .service-icon {
+    transform: scale(1.1);
+}
+
+.stat-item {
+    transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+}
+
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+}
+</style>
+{% endblock %} 
